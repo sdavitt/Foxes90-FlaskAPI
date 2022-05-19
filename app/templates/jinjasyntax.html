@@ -1,0 +1,22 @@
+{# An exploration of Jinja Templating! #} {# This is a Jinja comment #}
+
+{# Jinja allows us to seamlessly blend html code with Pythonic statements and the values of python variables #}
+{# Jinja Comments: bounded by curly brackets and octothorps/pound signs/hashtags #}
+{# Jinja Statements: Python code -> for loops/conditionals -> curly brackets with percent signs #}
+{# Jinja Expressions: Python values -> variables, function calls -> print out the value to the html -> double curly brakcets #}
+
+{% if True %}
+    {# above is a jinja conditional statement #}
+    {# just like python, a jinja conditional statement starts a new code block #}
+    {# in Jinja, because we're actually writing in an html file, we must manually end the code block #}
+{% elif True %}
+    {# Jinja conditionals can also have elifs #}
+{% endif %}
+
+{% for i in range(5) %}
+    {% for x in range(10) %}
+    {# the jinja for loop with repeat the code inside of it adding the result to the template #}
+    <h1 id="{{ i }}">Foxes</h1>
+    {# this for loop would create 5 different h1s each with an id 0 thru 4, all with the contents "Foxes"#}
+    {% endfor %}
+{% endfor %}

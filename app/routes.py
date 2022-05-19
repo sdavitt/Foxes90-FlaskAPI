@@ -11,6 +11,12 @@
 # in order to set up a route we need a few tools
 # 1. we need access to our Flask object
 from app import app
+# 2. we need to be able to return an html file from our flask routes
+# using render_template() from the flask package
+from flask import render_template
+
+# import other packages we need
+import requests as r
 
 # route decorator
 # @<flask object/bluprint name>.route('/url endpoint', <methods>)
@@ -18,7 +24,32 @@ from app import app
 @app.route('/')
 def home():
     # this is a regular python function, I can write normal python code here
-    greeting = 'Hello, Foxes!'
+    greeting = 'Welcome to flask week, Foxes!'
     print(greeting)
+    students = ['Jose', 'Kristen', 'Tyler', 'Craig', 'Yasir', 'Sven', 'Enrique', 'BT', 'DeVante', 'Nadia', 'Donovan']
     # the return value of this function is what is displayed on the webpage
-    return 'Hello, world.'
+    return render_template('index.html', greeting=greeting, students=students)
+
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+
+# let's look at a more complex example of routing and using python code
+@app.route('/drivers')
+def f1Drivers():
+    # make an API call and utilize information from that API call in the HTML templating
+    # in order to make an API call we need the requests package... let's install and import the requests package
+    data = r.get('https://ergast.com/api/f1/current/driverStandings.json')
+    if data.status_code == 200:
+        data = data.json()
+    else:
+        return 'broken api'
+    seasonNum = data['MRData']['StandingsTable']['season']
+    driversList = [(f'{x["Driver"]["givenName"]} {x["Driver"]["familyName"]}', x['points']) for x in data['MRData']['StandingsTable']['StandingsLists'][0]['DriverStandings']]
+    context = {
+        'season': seasonNum,
+        'drivers': driversList
+    }
+    return render_template('f1.html', **context)

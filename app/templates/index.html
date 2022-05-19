@@ -1,0 +1,14 @@
+{% extends 'components/layout.html' %}
+
+{% block content %}
+<h1>Hello!</h1>
+<p>{{ greeting }}</p>
+
+{% for student in students %}
+    {% if 'o' in student %}
+        <p>{{ student }}</p>
+    {% elif 's' in student.lower() %}
+        <h3>{{ student }}!</h3>
+    {% endif %}
+{% endfor %}
+{% endblock content %}
