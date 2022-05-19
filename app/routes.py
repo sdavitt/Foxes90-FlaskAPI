@@ -17,6 +17,7 @@ from flask import render_template
 
 # import other packages we need
 import requests as r
+from .services import getF1Drivers
 
 # route decorator
 # @<flask object/bluprint name>.route('/url endpoint', <methods>)
@@ -41,15 +42,5 @@ def about():
 def f1Drivers():
     # make an API call and utilize information from that API call in the HTML templating
     # in order to make an API call we need the requests package... let's install and import the requests package
-    data = r.get('https://ergast.com/api/f1/current/driverStandings.json')
-    if data.status_code == 200:
-        data = data.json()
-    else:
-        return 'broken api'
-    seasonNum = data['MRData']['StandingsTable']['season']
-    driversList = [(f'{x["Driver"]["givenName"]} {x["Driver"]["familyName"]}', x['points']) for x in data['MRData']['StandingsTable']['StandingsLists'][0]['DriverStandings']]
-    context = {
-        'season': seasonNum,
-        'drivers': driversList
-    }
+    context = getF1Drivers()
     return render_template('f1.html', **context)
