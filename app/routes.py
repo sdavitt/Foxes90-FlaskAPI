@@ -15,6 +15,7 @@ from app import app
 # using render_template() from the flask package
 from flask import render_template
 
+
 # import other packages we need
 import requests as r
 from .services import getF1Drivers
@@ -42,5 +43,7 @@ def about():
 def f1Drivers():
     # make an API call and utilize information from that API call in the HTML templating
     # in order to make an API call we need the requests package... let's install and import the requests package
-    context = getF1Drivers()
+    context = getF1Drivers() # sets the value of the context variable to a dictionary - the return value of the getF1Drivers function
     return render_template('f1.html', **context)
+
+
