@@ -13,7 +13,7 @@
 from app import app
 # 2. we need to be able to return an html file from our flask routes
 # using render_template() from the flask package
-from flask import render_template
+from flask import render_template, flash
 
 
 # import other packages we need
@@ -30,6 +30,7 @@ def home():
     print(greeting)
     students = ['Jose', 'Kristen', 'Tyler', 'Craig', 'Yasir', 'Sven', 'Enrique', 'BT', 'DeVante', 'Nadia', 'Donovan']
     # the return value of this function is what is displayed on the webpage
+    flash(f'This is showing multiple flash messages at once!', 'info')
     return render_template('index.html', greeting=greeting, students=students)
 
 
