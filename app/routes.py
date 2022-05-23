@@ -39,7 +39,7 @@ def about():
 
 
 # let's look at a more complex example of routing and using python code
-@app.route('/drivers')
+@app.route('/drivers', methods=['GET'])
 def f1Drivers():
     # make an API call and utilize information from that API call in the HTML templating
     # in order to make an API call we need the requests package... let's install and import the requests package

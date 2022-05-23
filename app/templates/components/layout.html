@@ -21,7 +21,6 @@
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
@@ -34,11 +33,11 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="{{ url_for('f1Drivers') }}">F1 Standings</a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                        data-toggle="dropdown" aria-expanded="false">
-                        Dropdown
-                    </a>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    {# url_for('blueprint_name.route_function_name') creates a link to a route within a blueprint #}
+                    <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
                 </li>
             </ul>
         </div>

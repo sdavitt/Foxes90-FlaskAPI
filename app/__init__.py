@@ -7,12 +7,21 @@ from flask import Flask
 # from the config file import the Config class that we created
 from config import Config
 
+# import blueprints for registration
+from .auth.routes import auth
+
+
 # define/instantiate our Flask app... aka create the actual object that will be our Flask app
 app = Flask(__name__)
 
 # tell this app how it is going to be configured
 app.config.from_object(Config)
 # aka configuring our flask app based on the Config class we made in the config.py file
+
+# create the link of communication between blueprints and app
+# aka register our blueprints
+app.register_blueprint(auth)
+
 
 # our flask app is really dumb. if we do not tell it about the existence of other files, it will assume they do not exist
 # import the routes file here so that our Flask app knows the routes exist
