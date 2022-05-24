@@ -19,6 +19,7 @@ from flask import render_template, flash
 # import other packages we need
 import requests as r
 from .services import getF1Drivers
+from flask_login import login_required
 
 # route decorator
 # @<flask object/bluprint name>.route('/url endpoint', <methods>)
@@ -41,6 +42,7 @@ def about():
 
 # let's look at a more complex example of routing and using python code
 @app.route('/drivers', methods=['GET'])
+@login_required
 def f1Drivers():
     # make an API call and utilize information from that API call in the HTML templating
     # in order to make an API call we need the requests package... let's install and import the requests package
