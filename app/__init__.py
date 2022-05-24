@@ -10,6 +10,10 @@ from config import Config
 # import blueprints for registration
 from .auth.routes import auth
 
+# imports for database stuff
+from .models import db
+from flask_migrate import Migrate
+
 
 # define/instantiate our Flask app... aka create the actual object that will be our Flask app
 app = Flask(__name__)
@@ -21,6 +25,10 @@ app.config.from_object(Config)
 # create the link of communication between blueprints and app
 # aka register our blueprints
 app.register_blueprint(auth)
+
+# set up ORM and Migrate communication with app and eachother
+db.init_app(app) # if this isnt here, our app and our database don't know how to talk to eachother (for queries, adding data, etc.)
+migrate = Migrate(app, db) # this is actually giving us the ability to modify database structure from our flask app (aka create tables, etc.)
 
 
 # our flask app is really dumb. if we do not tell it about the existence of other files, it will assume they do not exist
