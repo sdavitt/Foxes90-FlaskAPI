@@ -44,13 +44,13 @@ class User(db.Model, UserMixin):
 class Animal(db.Model):
     # global attributes for each column in the database
     id = db.Column(db.String(40), primary_key=True)
-    species = db.Column(db.String(50), nullable=False)
+    species = db.Column(db.String(50), nullable=False, unique=True)
     latin_name = db.Column(db.String(255))
     size_cm = db.Column(db.Integer)
     diet = db.Column(db.String(255))
     lifespan = db.Column(db.String(255))
     description = db.Column(db.String(255), nullable=False)
-    image = db.Column(db.String(100))
+    image = db.Column(db.String(255))
     price = db.Column(db.Float(2), nullable=False) # the number specified in the Float is the number of decimal places
     created_on = db.Column(db.DateTime, default=datetime.utcnow())
 
@@ -85,5 +85,10 @@ class Animal(db.Model):
             'created_on': self.created_on
         }
 
-
-    
+    # accepts a dictionary containing attributes that should be changed
+    # then goes and changes whichevery attributes are present in the dictionary
+    def from_dict(self, dict):
+        # for each key that is in the dictionary, I want to redefine the associated variable
+        for key in dict:
+            getattr(self, key) # try to get the attribute such that we error if a non-existent attribute was provided
+            setattr(self, key, dict[key]) # same as self.attribute = value
