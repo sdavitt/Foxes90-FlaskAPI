@@ -15,45 +15,10 @@
 <body>
     {% block header %}
     {% endblock header %}
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Foxes90API</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    {# url_for('route function name') creates a link to that route #}
-                    <a class="nav-link" href="{{ url_for('home') }}">Home</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="{{ url_for('about') }}">About</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="{{ url_for('f1Drivers') }}">F1 Standings</a>
-                </li>
-            </ul>
-            <ul class="navbar-nav ml-auto">
-                {% if current_user.is_authenticated %}
-                <li class="nav-item active">
-                    <a class="nav-link">{{ "{} {}".format(current_user.first_name, current_user.last_name) }}</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
-                </li>
-                {% else %}
-                <li class="nav-item active">
-                    {# url_for('blueprint_name.route_function_name') creates a link to a route within a blueprint #}
-                    <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="{{ url_for('auth.register') }}">Register</a>
-                </li>
-                {% endif %}
-            </ul>
-        </div>
-    </nav>
+
+    <!-- Can include code from another html file using include -->
+    {% include 'components/navbar.html' %}
+    
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
