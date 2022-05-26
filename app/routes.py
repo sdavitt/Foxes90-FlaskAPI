@@ -20,6 +20,7 @@ from flask import render_template, flash
 import requests as r
 from .services import getF1Drivers
 from flask_login import login_required
+from .models import User, Post, db
 
 # route decorator
 # @<flask object/bluprint name>.route('/url endpoint', <methods>)
@@ -50,3 +51,15 @@ def f1Drivers():
     return render_template('f1.html', **context)
 
 
+# blog route #1 - profile page
+@app.route('/blog/<string:username>', methods=['GET'])
+def userProfile(username):
+    # Is this an actual user?
+    user = User.query.filter_by(username=username).first()
+    # now we have our user - get their posts
+    posts = Post.query.filter_by(author=user.id).all()
+    # Maybe I want to change up how our timestamps look before they hit the page
+    for p in posts:
+        p.timestamp = str(p.timestamp)[:-7]
+    # now that we have the user object and all of their posts, send that data over to the template to be rendered
+    return render_template('profile.html', user=user, posts=posts)

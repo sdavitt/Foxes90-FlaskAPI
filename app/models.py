@@ -28,10 +28,12 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(100), nullable=False, unique=True)
     email = db.Column(db.String(100), nullable=False, unique=True)
     password = db.Column(db.String(255), nullable=False)
+    bio = db.Column(db.String(255), default='No bio.')
     first_name = db.Column(db.String(100))
     last_name = db.Column(db.String(100))
     created = db.Column(db.DateTime, default=datetime.utcnow())
     api_token = db.Column(db.String(100))
+    posts = db.relationship('Post', backref='post_author') # tells the User model that it has a relationship with the Post model
 
     def __init__(self, username, email, password, first_name='', last_name=''):
         self.username = username
@@ -40,6 +42,13 @@ class User(db.Model, UserMixin):
         self.last_name = last_name.title()
         self.id = str(uuid4())
         self.password = generate_password_hash(password)
+
+# Post model - one User can have many Posts
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.String(255), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow())
+    author = db.Column(db.String, db.ForeignKey('user.id')) # create a foreign key to another db.Model
 
 # Animal model overhaul for api
 class Animal(db.Model):
