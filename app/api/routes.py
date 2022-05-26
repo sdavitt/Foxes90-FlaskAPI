@@ -5,6 +5,7 @@ api = Blueprint('api', __name__, url_prefix='/api')
 
 # imports for api routes
 from app.models import Animal, db
+from .services import token_required
 
 # an API endpoint is just a regular route that returns JSON data instead of a render template or redirect
 
@@ -64,6 +65,7 @@ def getAnimalName(name):
 
 
 @api.route('/create', methods=['POST'])
+@token_required
 def createAnimal():
     '''
     [POST] create a new animal in our database with data provided in the request body
@@ -100,6 +102,7 @@ def createAnimal():
     return jsonify({'created': a.to_dict()}), 200
 
 @api.route('/update/<string:id>', methods=['POST'])
+@token_required
 def updateAnimal(id):
     '''
     [POST] updates an existing animal in our database with data provided in the request body
@@ -130,6 +133,7 @@ def updateAnimal(id):
         return jsonify({'Request failed': 'Invalid request or animal ID does not exist.'}), 400
     
 @api.route('/delete/<string:id>', methods=['DELETE'])
+@token_required
 def removeAnimal(id):
     """
     [DELETE] accepts an animal ID - if that ID exists in the database, remove that animal and return the removed animal object

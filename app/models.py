@@ -31,6 +31,7 @@ class User(db.Model, UserMixin):
     first_name = db.Column(db.String(100))
     last_name = db.Column(db.String(100))
     created = db.Column(db.DateTime, default=datetime.utcnow())
+    api_token = db.Column(db.String(100))
 
     def __init__(self, username, email, password, first_name='', last_name=''):
         self.username = username
