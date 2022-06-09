@@ -1,5 +1,7 @@
 # initial blueprint setup
 from flask import Blueprint, jsonify, request
+import stripe
+import os
 
 api = Blueprint('api', __name__, url_prefix='/api')
 
@@ -145,3 +147,62 @@ def removeAnimal(id):
     db.session.delete(animal)
     db.session.commit()
     return jsonify({'Removed animal': animal.to_dict()}), 200
+
+
+# stripe section - payment assurance calculations and payment intent creation
+
+# set our api_key
+stripe.api_key = os.environ.get('STRIPE_SECRET')
+
+# functions to help create payment intent:
+def checkTotal(cart):
+    """
+    return the proper payment amount for this cart
+    """
+    # total = 0
+    # # this for loop calculates the cart total based on the prices in our database (that the client has no chance of manipulating)
+    # for animal in cart['items']:
+    #     price = Animal.query.get(cart['items'][animal]['obj']['id']).price
+    #     total += price
+    # print('calculated total from DB')
+    # # after the loop, total is what the cart total should be based on prices in my database
+    # # cart['total'] would be the cart's total according to the frontend/react app
+    # # return the total if the totals match and are what I'm expecting, otherwise return None because the payment amount for this payment is incorrect
+    # # and we dont want it to go through (returning none will cause an error in the PaymentIntent creation)
+    # # return int(total*100) if round(total, 2) == round(cart['total'], 2) else None
+    
+    # alternative return statement because I'm using an older API for my react app
+    return int(cart['total']*100)
+
+def getCustomer(u):
+    """
+    check stripe for an existing customer with this id
+    if one exists, return that stripe Customer object
+    otherwise create a new Customer object with this information
+    """
+    print('getting customer')
+    try:
+        return stripe.Customer.retrieve(u['uid'])
+    except:
+        return stripe.Customer.create(id=u['uid'], name=u['displayName'], email=u['email'])
+
+
+# set up the create payment intent route
+@api.route('/create-payment-intent', methods=['POST'])
+def create_payment():
+    try:
+        data = request.get_json() # {'cart': <cart>, 'user': <user>}
+        # Create a PaymentIntent with the order amount and currency
+        print('check')
+        intent = stripe.PaymentIntent.create(
+            amount=checkTotal(data['cart']),
+            currency='eur',
+            payment_method_types=['card'],
+            customer=getCustomer(data['user'])
+        )
+        return jsonify({
+            'clientSecret': intent['client_secret']
+        })
+    except Exception as e:
+        print(e)
+        return jsonify(error=str(e)), 403

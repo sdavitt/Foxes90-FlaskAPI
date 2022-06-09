@@ -4,6 +4,7 @@
 
 # from the flask package import the Flask object/class
 from flask import Flask
+from flask_cors import CORS
 # from the config file import the Config class that we created
 from config import Config
 
@@ -21,6 +22,9 @@ app = Flask(__name__)
 # tell this app how it is going to be configured
 app.config.from_object(Config)
 # aka configuring our flask app based on the Config class we made in the config.py file
+
+# allow CORS
+CORS(app, origins='*')
 
 # create the link of communication between blueprints and app
 # aka register our blueprints
